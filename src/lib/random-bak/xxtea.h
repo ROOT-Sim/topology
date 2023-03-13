@@ -1,5 +1,5 @@
 /**
- * @file lib/random/xxtea.h
+ * @file lib/random-bak/xxtea.h
  *
  * @brief XXTEA block cipher
  *

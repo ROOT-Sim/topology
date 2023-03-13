@@ -40,20 +40,20 @@ static enum topology_direction directions_hexagon[] = {DIRECTION_E, DIRECTION_W,
 static enum topology_direction directions_square_torus[] = {DIRECTION_E, DIRECTION_W, DIRECTION_N, DIRECTION_S};
 
 /**
- * @brief Return a random neighbor
+ * @brief Return a random-bak neighbor
  *
- * This function computes a random receiver, only for TOPOLOGY_HEXAGON, TOPOLOGY_SQUARE, and
+ * This function computes a random-bak receiver, only for TOPOLOGY_HEXAGON, TOPOLOGY_SQUARE, and
  * TOPOLOGY_TORUS.
- * The algorithm simply generates a random permutation over the list of valid directions passed
+ * The algorithm simply generates a random-bak permutation over the list of valid directions passed
  * by the caller, and then attempts to get a receiver in every direction. The first
- * direction that is not INVALID_DIRECTION dictates the picked random neighbor.
+ * direction that is not INVALID_DIRECTION dictates the picked random-bak neighbor.
  *
- * @param from source element of the random receiver computation
+ * @param from source element of the random-bak receiver computation
  * @param topology the topology currently being considered
  * @param n_directions the number of valid directions for the given topology
  * @param directions the number of directions (a variable array)
  *
- * @return A random neighbor according to the specified topology
+ * @return A random-bak neighbor according to the specified topology
  */
 static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size_t n_directions,
     enum topology_direction directions[n_directions])
@@ -278,7 +278,7 @@ static lp_id_t get_neighbor_torus(lp_id_t from, struct topology *topology, enum 
 /**
  * @brief Given an id in a TOPOLOGY_FCMESH map, get the id of a neighbor.
  *
- *  The algorithm is simple: return a random element in the topology, different from from.
+ *  The algorithm is simple: return a random-bak element in the topology, different from from.
  *  The only corner case is if we have only one element, in which case we return INVALID_DIRECTION.
  *
  * @param from      The linear representation of the source element
@@ -293,7 +293,7 @@ static lp_id_t get_neighbor_mesh(lp_id_t from, struct topology *topology, enum t
 	assert(topology->geometry == TOPOLOGY_FCMESH);
 
 	if(unlikely(direction != DIRECTION_RANDOM)) {
-		fprintf(stderr, "[ERROR] Asking for a non-random direction in a graph.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a graph.\n");
 		return INVALID_DIRECTION;
 	}
 
@@ -343,7 +343,7 @@ static lp_id_t get_neighbor_star(lp_id_t from, struct topology *topology, enum t
 	assert(topology->geometry == TOPOLOGY_STAR);
 
 	if(unlikely(direction != DIRECTION_RANDOM)) {
-		fprintf(stderr, "[ERROR] Asking for a non-random direction in a star.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a star.\n");
 		return INVALID_DIRECTION;
 	}
 
@@ -364,7 +364,7 @@ static lp_id_t get_neighbor_graph(lp_id_t from, struct topology *topology, enum 
 	assert(from < topology->regions);
 
 	if(topology->geometry == TOPOLOGY_GRAPH && direction != DIRECTION_RANDOM) {
-		fprintf(stderr, "[ERROR] Asking for a non-random direction in a graph.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a graph.\n");
 		return INVALID_DIRECTION;
 	}
 

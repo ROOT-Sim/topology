@@ -1,5 +1,5 @@
 /**
- * @file lib/random/random.h
+ * @file lib/random-bak/random-bak.h
  *
  * @brief Random Number Generators
  *
@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 
-/// The container for the pseudo random number generator context
+/// The container for the pseudo random-bak number generator context
 struct rng_ctx {
 	/// The current PRNG state
 	uint64_t state[4];

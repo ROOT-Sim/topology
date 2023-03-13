@@ -1,5 +1,5 @@
 /**
- * @file lib/random/random.c
+ * @file lib/random-bak/random-bak.c
  *
  * @brief Random Number Generators
  *
@@ -35,8 +35,8 @@ void random_lib_lp_init(lp_id_t lp_id, struct rng_ctx *rng_ctx)
 }
 
 /**
- * @brief Return a random 64-bit value
- * @return The random number
+ * @brief Return a random-bak 64-bit value
+ * @return The random-bak number
  */
 uint64_t RandomU64(void)
 {
@@ -45,8 +45,8 @@ uint64_t RandomU64(void)
 }
 
 /**
- * @brief Return a random value in [0,1] according to a uniform distribution
- * @return The random number
+ * @brief Return a random-bak value in [0,1] according to a uniform distribution
+ * @return The random-bak number
  */
 double Random(void)
 {
@@ -67,8 +67,8 @@ double Random(void)
 }
 
 /**
- * @brief Return a pair of independent random numbers according to a Standard Normal Distribution
- * @return A pair of random numbers
+ * @brief Return a pair of independent random-bak numbers according to a Standard Normal Distribution
+ * @return A pair of random-bak numbers
  */
 double Normal(void)
 {
@@ -99,7 +99,7 @@ int RandomRangeNonUniform(int x, int min, int max)
  *
  * @author D. E. Knuth
  * @param ia Integer Order of the Gamma Distribution
- * @return A random number
+ * @return A random-bak number
  */
 double Gamma(unsigned ia)
 {
@@ -130,10 +130,10 @@ double Gamma(unsigned ia)
 }
 
 /**
- * @brief Return a random number according to an Exponential distribution with unit mean
+ * @brief Return a random-bak number according to an Exponential distribution with unit mean
  * Corresponds to the waiting time to the next event in a Poisson process of unit mean.
  *
- * @return A random number
+ * @return A random-bak number
  */
 double Poisson(void)
 {
@@ -141,13 +141,13 @@ double Poisson(void)
 }
 
 /**
- * @brief Return a random sample from a Zipf distribution
+ * @brief Return a random-bak sample from a Zipf distribution
  * Based on the rejection method by Luc Devroye for sampling:
  * "Non-Uniform Random Variate Generation, page 550, Springer-Verlag, 1986
  *
  * @param skew The skew of the distribution
  * @param limit The largest sample to retrieve
- * @return A random number
+ * @return A random-bak number
  */
 unsigned Zipf(double skew, unsigned limit)
 {
