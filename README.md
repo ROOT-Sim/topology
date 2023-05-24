@@ -1,4 +1,4 @@
-# cROOT-Sim
+# ROOT-Sim Topology Library
 
 [![Build Status](https://github.com/ROOT-Sim/cROOT-Sim/workflows/ROOT-Sim%20core%20CI/badge.svg)](https://github.com/ROOT-Sim/cROOT-Sim/actions)
 [![GitHub issues](https://img.shields.io/github/issues/ROOT-Sim/cROOT-Sim)](https://github.com/ROOT-Sim/cROOT-Sim/issues)
@@ -8,4 +8,4 @@
 
 ----------------------------------------------------------------------------------------
 
-Metapackage for release.
+This is the ROOT-Sim topology library

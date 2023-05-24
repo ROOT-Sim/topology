@@ -6,11 +6,12 @@
  * SPDX-FileCopyrightText: 2008-2022 HPDCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
+#include <assert.h>
+#include <limits.h>
 #include <time.h>
 
 #include <test.h>
-#include <ROOT-Sim.h>
-#include <lp/lp.h>
+#include <ROOT-Sim/topology.h>
 
 const enum topology_geometry LAST_TOPOLOGY_WITH_TWO_PARAMETERS = TOPOLOGY_TORUS;
 const enum topology_geometry LAST_TOPOLOGY_VALID_VALUE = TOPOLOGY_GRAPH;
@@ -587,8 +588,6 @@ int test_init_fini(_unused void *_)
 
 int main(void)
 {
-	current_lp = test_lp_mock_get();
-
 	test("Topology initialization and release", test_init_fini, NULL);
 	test("Hexagon topology", test_hexagon, NULL);
 	test("Square topology", test_square, NULL);

@@ -15,6 +15,11 @@
 */
 #pragma once
 
+#include <stdint.h>
+#include <stdbool.h>
+
+typedef uint64_t lp_id_t;
+
 struct topology;
 
 enum topology_geometry {

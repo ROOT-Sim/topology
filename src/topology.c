@@ -9,12 +9,15 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #include <assert.h>
+#include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
-#include <core/core.h>
-#include <datatypes/list.h>
-
-#include <ROOT-Sim.h>
+#include <ROOT-Sim/topology.h>
+#include <likely.h>
+#include <list.h>
+#include <random.h>
 
 /// A node in the topology adjacency matrix
 struct graph_node {
@@ -39,21 +42,23 @@ static enum topology_direction directions_hexagon[] = {DIRECTION_E, DIRECTION_W,
 /// Allowed directions to reach a neighbor in either a TOPOLOGY_SQUARE or a TOPOLOGY_TORUS
 static enum topology_direction directions_square_torus[] = {DIRECTION_E, DIRECTION_W, DIRECTION_N, DIRECTION_S};
 
+
 /**
- * @brief Return a random-bak neighbor
+ * @brief Return a random neighbor
  *
- * This function computes a random-bak receiver, only for TOPOLOGY_HEXAGON, TOPOLOGY_SQUARE, and
- * TOPOLOGY_TORUS.
- * The algorithm simply generates a random-bak permutation over the list of valid directions passed
- * by the caller, and then attempts to get a receiver in every direction. The first
- * direction that is not INVALID_DIRECTION dictates the picked random-bak neighbor.
+ * This function computes a random receiver, only for TOPOLOGY_HEXAGON,
+ * TOPOLOGY_SQUARE, and TOPOLOGY_TORUS. The algorithm simply generates a
+ * random permutation over the list of valid directions passed by the
+ * caller, and then attempts to get a receiver in every direction. The first
+ * direction that is not INVALID_DIRECTION dictates the picked random
+ * neighbor.
  *
- * @param from source element of the random-bak receiver computation
+ * @param from source element of the random receiver computation
  * @param topology the topology currently being considered
  * @param n_directions the number of valid directions for the given topology
  * @param directions the number of directions (a variable array)
  *
- * @return A random-bak neighbor according to the specified topology
+ * @return A random neighbor according to the specified topology
  */
 static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size_t n_directions,
     enum topology_direction directions[n_directions])
@@ -68,7 +73,7 @@ static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size
 
 	if(n_directions > 1) {
 		for(size_t i = 0; i < n_directions - 1; i++) {
-			size_t j = RandomRange((int)i, (int)n_directions - 1);
+			size_t j = topology_randomrange((int)i, (int)n_directions - 1);
 			enum topology_direction t = directions[j];
 			directions[j] = directions[i];
 			directions[i] = t;
@@ -87,10 +92,12 @@ static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size
 
 
 /**
- * @brief Given a linear id in a TOPOLOGY_HEXAGON map, get the linear id of a neighbor in a given direction (if any).
+ * @brief Given a linear id in a TOPOLOGY_HEXAGON map, get the linear id of a
+ * neighbor in a given direction (if any).
  *
- * We use only one possible representation of a hexagonal map, namely a "pointy" "odd-r" horizontal layout,
- * with an arbitrary width and height. In this representation, odd rows are showed right:
+ * We use only one possible representation of a hexagonal map, namely a "pointy"
+ * "odd-r" horizontal layout, with an arbitrary width and height. In this
+ * representation, odd rows are showed right:
  *
  *   / \ / \ / \ / \
  *  |0,0|1,0|2,0|3,0|
@@ -100,33 +107,38 @@ static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size
  *  |0,2|1,2|2,2|3,2|
  *   \ / \ / \ / \ /
  *
- *  This is a map of size 3x4, in which 12 different cells are represented. In each hexagon, the (x,y)
- *  coordinates are represented. Nevertheless, to support simulation, we typically linearize the cells of
- *  the map. Indeed, the cells are linearly mapped as:
- *  0 → (0,0); 1 → (1,0); 2 → (2,0); 3 → (3,0); 4 → (0,1); 5 → (1,1); 6 → (2,1); 7 → (3,1); etc.
+ *  This is a map of size 3x4, in which 12 different cells are represented. In
+ * each hexagon, the (x,y) coordinates are represented. Nevertheless, to support
+ * simulation, we typically linearize the cells of the map. Indeed, the cells
+ * are linearly mapped as: 0 → (0,0); 1 → (1,0); 2 → (2,0); 3 → (3,0); 4 →
+ * (0,1); 5 → (1,1); 6 → (2,1); 7 → (3,1); etc.
  *
- *  The general mapping from linear (L) to hex (x,y) is therefore implemented as (in integer arithmetic):
- *  y = L / width
- *  x = L % width
+ *  The general mapping from linear (L) to hex (x,y) is therefore implemented as
+ * (in integer arithmetic): y = L / width x = L % width
  *
  *  while the mapping from (x,y) to L is implemented as:
  *
  *  L = y * width + x
  *
- *  When checking for a neighbor, we have to consider the row in which we are starting from. Indeed, considering
- *  that it's an "odd-r" map, if we are in an odd row and we move "up left" or "down left", we retain the same x
- *  value. Conversely, if we move from an odd row "up right" or "down right", we have to increment x. Moving from
- *  an even row is the other way round (retain x if you move up/down right, decrement if you move up/down left).
- *  In this implementation, we use bitwise and with 1 to check if we are in an odd row.
- *  Moving up/down always decrements/increments y. Moving right/left only increments/decrements x.
+ *  When checking for a neighbor, we have to consider the row in which we are
+ * starting from. Indeed, considering that it's an "odd-r" map, if we are in an
+ * odd row and we move "up left" or "down left", we retain the same x value.
+ * Conversely, if we move from an odd row "up right" or "down right", we have to
+ * increment x. Moving from an even row is the other way round (retain x if you
+ * move up/down right, decrement if you move up/down left). In this
+ * implementation, we use bitwise and with 1 to check if we are in an odd row.
+ *  Moving up/down always decrements/increments y. Moving right/left only
+ * increments/decrements x.
  *
- *  At the end, to check if a move is valid, we compare new coordinates (x,y) with the size of the grid.
+ *  At the end, to check if a move is valid, we compare new coordinates (x,y)
+ * with the size of the grid.
  *
  *
  * @param from      The linear representation of the source element
  * @param topology  The structure keeping the information about the topology
  * @param direction The direction to move towards, to find a linear id
- * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor does not exist in the topology.
+ * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor
+ * does not exist in the topology.
  */
 static lp_id_t get_neighbor_hexagon(lp_id_t from, struct topology *topology, enum topology_direction direction)
 {
@@ -171,22 +183,24 @@ static lp_id_t get_neighbor_hexagon(lp_id_t from, struct topology *topology, enu
 
 
 /**
- * @brief Given a linear id in a TOPOLOGY_SQUARE map, get the linear id of a neighbor in a given direction (if any).
+ * @brief Given a linear id in a TOPOLOGY_SQUARE map, get the linear id of a
+ * neighbor in a given direction (if any).
  *
- *  The general mapping from linear (L) to hex (x,y) is therefore implemented as (in integer arithmetic):
- *  y = L / width
- *  x = L % width
+ *  The general mapping from linear (L) to hex (x,y) is therefore implemented as
+ * (in integer arithmetic): y = L / width x = L % width
  *
  *  while the mapping from (x,y) to L is implemented as:
  *  L = y * width + x
  *
- *  Getting a neighbor simply entails incrementing/decrementing x or y, depending on the direction, and
- *  then checking if such an element exists in the current map.
+ *  Getting a neighbor simply entails incrementing/decrementing x or y,
+ * depending on the direction, and then checking if such an element exists in
+ * the current map.
  *
  * @param from      The linear representation of the source element
  * @param topology  The structure keeping the information about the topology
  * @param direction The direction to move towards, to find a linear id
- * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor does not exist in the topology.
+ * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor
+ * does not exist in the topology.
  */
 static lp_id_t get_neighbor_square(lp_id_t from, struct topology *topology, enum topology_direction direction)
 {
@@ -221,17 +235,17 @@ static lp_id_t get_neighbor_square(lp_id_t from, struct topology *topology, enum
 
 
 /**
- * @brief Given a linear id in a TOPOLOGY_TORUS map, get the linear id of a neighbor in a given direction (if any).
+ * @brief Given a linear id in a TOPOLOGY_TORUS map, get the linear id of a
+ * neighbor in a given direction (if any).
  *
- *  The general mapping from linear (L) to hex (x,y) is therefore implemented as (in integer arithmetic):
- *  y = L / width
- *  x = L % width
+ *  The general mapping from linear (L) to hex (x,y) is therefore implemented as
+ * (in integer arithmetic): y = L / width x = L % width
  *
  *  while the mapping from (x,y) to L is implemented as:
  *  L = y * width + x
  *
- *  Getting a neighbor simply entails incrementing/decrementing x or y, depending on the direction, and
- *  computing the modulus on the map size.
+ *  Getting a neighbor simply entails incrementing/decrementing x or y,
+ * depending on the direction, and computing the modulus on the map size.
  *
  * @param from      The linear representation of the source element
  * @param topology  The structure keeping the information about the topology
@@ -278,13 +292,15 @@ static lp_id_t get_neighbor_torus(lp_id_t from, struct topology *topology, enum 
 /**
  * @brief Given an id in a TOPOLOGY_FCMESH map, get the id of a neighbor.
  *
- *  The algorithm is simple: return a random-bak element in the topology, different from from.
- *  The only corner case is if we have only one element, in which case we return INVALID_DIRECTION.
+ *  The algorithm is simple: return a random element in the topology,
+ * different from from. The only corner case is if we have only one element, in
+ * which case we return INVALID_DIRECTION.
  *
  * @param from      The linear representation of the source element
  * @param topology  The structure keeping the information about the topology
  * @param direction Can be only set to DIRECTION_RANDOM
- * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor does not exist in the topology.
+ * @return The linear id of the neighbor, INVALID_DIRECTION if such neighbor
+ * does not exist in the topology.
  */
 static lp_id_t get_neighbor_mesh(lp_id_t from, struct topology *topology, enum topology_direction direction)
 {
@@ -293,7 +309,7 @@ static lp_id_t get_neighbor_mesh(lp_id_t from, struct topology *topology, enum t
 	assert(topology->geometry == TOPOLOGY_FCMESH);
 
 	if(unlikely(direction != DIRECTION_RANDOM)) {
-		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a graph.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random direction in a graph.\n");
 		return INVALID_DIRECTION;
 	}
 
@@ -302,7 +318,7 @@ static lp_id_t get_neighbor_mesh(lp_id_t from, struct topology *topology, enum t
 		return INVALID_DIRECTION;
 
 	do {
-		ret = ((double)topology->regions * Random());
+		ret = (lp_id_t)((double)topology->regions * topology_random());
 	} while(ret == from);
 
 	return ret;
@@ -314,7 +330,7 @@ static lp_id_t get_neighbor_bidring(lp_id_t from, struct topology *topology, enu
 	assert(topology->geometry == TOPOLOGY_BIDRING);
 
 	if(direction == DIRECTION_RANDOM) {
-		if(Random() < 0.5)
+		if(topology_random() < 0.5)
 			direction = DIRECTION_E;
 		else
 			direction = DIRECTION_W;
@@ -343,12 +359,12 @@ static lp_id_t get_neighbor_star(lp_id_t from, struct topology *topology, enum t
 	assert(topology->geometry == TOPOLOGY_STAR);
 
 	if(unlikely(direction != DIRECTION_RANDOM)) {
-		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a star.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random direction in a star.\n");
 		return INVALID_DIRECTION;
 	}
 
 	if(from == 0)
-		return RandomRange(1, (int)(topology->regions - 1));
+		return topology_randomrange(1, (int)(topology->regions - 1));
 	return 0;
 }
 
@@ -364,14 +380,14 @@ static lp_id_t get_neighbor_graph(lp_id_t from, struct topology *topology, enum 
 	assert(from < topology->regions);
 
 	if(topology->geometry == TOPOLOGY_GRAPH && direction != DIRECTION_RANDOM) {
-		fprintf(stderr, "[ERROR] Asking for a non-random-bak direction in a graph.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random direction in a graph.\n");
 		return INVALID_DIRECTION;
 	}
 
 	if(list_size(topology->adjacency[from]) == 0)
 		return INVALID_DIRECTION;
 
-	rand = Random();
+	rand = topology_random();
 	adj_node = list_head(topology->adjacency[from]);
 	do {
 		adj_neighbor = adj_node->neighbor;
@@ -568,21 +584,26 @@ lp_id_t GetReceiver(lp_id_t from, struct topology *topology, enum topology_direc
 /**
  * @brief Initialize a topology region.
  *
- * This is a variadic function, that initializes a topology depending on its actual shape.
- * In case the topology is a grid, two unsigned parameters should be passed,
- * to specify the width and height of the grid. For all other topologies (included generic graphs)
- * only a single unsigned parameter is needed, which is the number of elements composing the topology.
+ * This is a variadic function, that initializes a topology depending on its
+ * actual shape. In case the topology is a grid, two unsigned parameters should
+ * be passed, to specify the width and height of the grid. For all other
+ * topologies (included generic graphs) only a single unsigned parameter is
+ * needed, which is the number of elements composing the topology.
  *
- * @param geometry The geometry to be used in the topology, a value from enum topology_geometry
- * @param argc This is the number of variadic arguments passed to the function, computed thanks to
- *             some preprocessor black magic. This allows to make some early sanity check and prevent
- *             users to mess with the stack or initialize wrong topologies.
- * @param ... If geometry is TOPOLOGY_HEXAGON, TOPOLOGY_SQUARE, or TOPOLOGY_TORUS, two unsigned
- *            should be passed, to specify the width and height of the topology's grid.
- *            For all the other topologies, a single unsigned, determining the number of elements
- *            that compose the topology should be passed.
- * @return A pointer to as newly-allocated opaque topology struct. Releasing the topology (and all
- *         the memory internally used to represent it) can be done by passing it to ReleaseTopology().
+ * @param geometry The geometry to be used in the topology, a value from enum
+ * topology_geometry
+ * @param argc This is the number of variadic arguments passed to the function,
+ * computed thanks to some preprocessor black magic. This allows to make some
+ * early sanity check and prevent users to mess with the stack or initialize
+ * wrong topologies.
+ * @param ... If geometry is TOPOLOGY_HEXAGON, TOPOLOGY_SQUARE, or
+ * TOPOLOGY_TORUS, two unsigned should be passed, to specify the width and
+ * height of the topology's grid. For all the other topologies, a single
+ * unsigned, determining the number of elements that compose the topology should
+ * be passed.
+ * @return A pointer to as newly-allocated opaque topology struct. Releasing the
+ * topology (and all the memory internally used to represent it) can be done by
+ * passing it to ReleaseTopology().
  */
 struct topology *vInitializeTopology(enum topology_geometry geometry, int argc, ...)
 {
