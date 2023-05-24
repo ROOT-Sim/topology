@@ -8,7 +8,6 @@
  */
 #include <assert.h>
 #include <limits.h>
-#include <time.h>
 
 #include <test.h>
 #include <ROOT-Sim/topology.h>
@@ -531,6 +530,20 @@ int test_graph(_unused void *_)
 
 		ReleaseTopology(topology);
 	}
+
+	// Test link normalization
+	topology = InitializeTopology(TOPOLOGY_GRAPH, 3);
+	AddTopologyLink(topology, 0, 1, 1);
+	AddTopologyLink(topology, 0, 2, 1);
+	test_assert(NormalizeLinkProbabilities(topology));
+	bool dest[2] = {false, false};
+	for(int i = 0; i < 100; i++) {
+		dest[GetReceiver(0, topology, DIRECTION_RANDOM) - 1] = true;
+	}
+	test_assert(dest[0]);
+	test_assert(dest[1]);
+	ReleaseTopology(topology);
+
 
 	// Test sanity checks on graphs
 	topology = InitializeTopology(TOPOLOGY_GRAPH, 1);

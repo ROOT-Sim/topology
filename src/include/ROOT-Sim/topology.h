@@ -56,6 +56,7 @@ extern lp_id_t GetReceiver(lp_id_t from, struct topology *topology, enum topolog
 extern void ReleaseTopology(struct topology *topology);
 extern bool AddTopologyLink(struct topology *topology, lp_id_t from, lp_id_t to, double probability);
 extern bool IsNeighbor(lp_id_t from, lp_id_t to, struct topology *topology);
+extern bool NormalizeLinkProbabilities(struct topology *topology);
 
 
 // The following trick belongs to Laurent Deniau at CERN.

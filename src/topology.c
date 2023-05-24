@@ -468,6 +468,26 @@ lp_id_t CountDirections(lp_id_t from, struct topology *topology)
 	return UINT_MAX;
 }
 
+bool NormalizeLinkProbabilities(struct topology *topology) {
+	assert(topology);
+
+	if(unlikely(topology->geometry != TOPOLOGY_GRAPH)) {
+		fprintf(stderr, "[ERROR] Probability normalization is only supported for graphs.");
+		return false;
+	}
+
+	for(size_t i = 0; i < topology->regions; i++) {
+		int elements = list_size(topology->adjacency[i]);
+		struct graph_node *adj_node = list_head(topology->adjacency[i]);
+		double new_probability = 1. / elements;
+		while(adj_node) {
+			adj_node->probability = new_probability;
+			adj_node = list_next(adj_node);
+		}
+	}
+
+	return true;
+}
 
 bool IsNeighbor(lp_id_t from, lp_id_t to, struct topology *topology)
 {
