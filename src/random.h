@@ -1,13 +1,13 @@
 /**
-* @file xoroshiro.h
-*
-* @brief Xoroshiro RNG support functions
-*
-* Xoroshiro RNG support functions.
-*
-* SPDX-FileCopyrightText: 2008-2021 D. Blackman and S. Vigna <vigna@acm.org>
-* SPDX-License-Identifier: CC0-1.0
-*/
+ * @file random.h
+ *
+ * @brief topology RNG functions
+ *
+ * Topology RNG functions.
+ *
+ * SPDX-FileCopyrightText: 2008-2023 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 #pragma once
 
 #include <stdint.h>
