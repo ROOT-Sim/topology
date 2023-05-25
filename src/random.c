@@ -14,7 +14,31 @@
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
+
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <time.h>
+#ifndef _TIMEVAL_DEFINED /* also in winsock[2].h */
+#define _TIMEVAL_DEFINED
+struct timeval {
+	long tv_sec;
+	long tv_usec;
+};
+#endif /* _TIMEVAL_DEFINED */
+
+int gettimeofday(struct timeval* tp, void* tzp) {
+	DWORD t;
+	t = timeGetTime();
+	tp->tv_sec = t / 1000;
+	tp->tv_usec = t % 1000;
+	return 0;
+}
+#elif defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 #include <sys/time.h>
+#endif
+
+//#include <sys/time.h>
 
 #include <likely.h>
 #include <random.h>
@@ -22,7 +46,7 @@
 
 struct {
 	uint64_t state[4];
-} ctx;
+} ctx = {0};
 
 // clang-format off
 static const uint32_t xxtea_seeding_key[4] = {
@@ -64,7 +88,6 @@ static void init(void)
 {
 	struct timeval t;
 	gettimeofday(&t, NULL);
-
 	uint64_t master_seed = ((t.tv_sec * 1000000ULL + t.tv_usec) * 1000) % INT64_MAX;
 
 	ctx.state[0] = 1;
@@ -73,7 +96,15 @@ static void init(void)
 	ctx.state[3] = master_seed;
 	xxtea_encode((uint32_t *)ctx.state, 8, xxtea_seeding_key);
 }
-__attribute__((section(".init_array"))) __typeof__(init) *init_rstopology = init;
+
+#if defined(_WIN32) && defined(_MSC_VER)
+#pragma section(".CRT$XCU", read)
+#elif defined(__APPLE__) && defined(__MACH__)
+__attribute__((used)) __attribute__((section("__DATA,__mod_init_func")))
+#else
+__attribute__((used)) __attribute__((section (".init_array")))
+#endif
+__typeof__(init) *init_rstopology = init;
 
 /**
  * @brief Return a random-bak 64-bit value

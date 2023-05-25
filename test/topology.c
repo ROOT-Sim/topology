@@ -599,8 +599,23 @@ int test_init_fini(_unused void *_)
 	return 0;
 }
 
+extern struct {
+	uint64_t state[4];
+} ctx;
+
+int test_rng_is_initialized(_unused void *_)
+{
+	test_assert(ctx.state[0] != 0);
+	test_assert(ctx.state[1] != 0);
+	test_assert(ctx.state[2] != 0);
+	test_assert(ctx.state[3] != 0);
+
+	return 0;
+}
+
 int main(void)
 {
+	test("RNG is initialized", test_rng_is_initialized, NULL);
 	test("Topology initialization and release", test_init_fini, NULL);
 	test("Hexagon topology", test_hexagon, NULL);
 	test("Square topology", test_square, NULL);
