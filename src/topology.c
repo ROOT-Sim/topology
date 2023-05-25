@@ -12,7 +12,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
+#include <stdarg.h>
 
 #include <ROOT-Sim/topology.h>
 #include <likely.h>
