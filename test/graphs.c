@@ -1,0 +1,84 @@
+/**
+ * @file test/tests/lib/topology.c
+ *
+ * @brief Test: topology library
+ *
+ * SPDX-FileCopyrightText: 2008-2022 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+#include <limits.h>
+
+#include <test.h>
+#include <ROOT-Sim/topology.h>
+
+const enum topology_geometry LAST_TOPOLOGY_WITH_TWO_PARAMETERS = TOPOLOGY_TORUS;
+const enum topology_geometry LAST_TOPOLOGY_VALID_VALUE = TOPOLOGY_GRAPH;
+const enum topology_direction LAST_DIRECTION_VALID_VALUE = DIRECTION_SE;
+
+#define MAX_NODES_TEST 100
+#define NUM_QUERIES 500
+
+static int test_graph(_unused void *_)
+{
+	struct topology *topology;
+	unsigned num_edges;
+	lp_id_t from, to;
+
+	for(unsigned nodes = 1; nodes < MAX_NODES_TEST; nodes++) {
+		topology = InitializeTopology(TOPOLOGY_GRAPH, nodes);
+
+		num_edges = (unsigned)(nodes + (double)test_random_u() / ((double)ULLONG_MAX / (9 * nodes + 1) + 1));
+		for(unsigned edge = 0; edge < num_edges; edge++) {
+			from = test_random_range(nodes);
+			to = test_random_range(nodes);
+			test_assert(AddTopologyLink(topology, from, to, test_random_double()));
+			test_assert(AddTopologyLink(topology, from, to, 2.0) == false);
+			test_assert(AddTopologyLink(topology, from, to, -1.0) == false);
+		}
+
+		for(unsigned i = 0; i < NUM_QUERIES; i++) {
+			from = test_random_range(nodes);
+			to = GetReceiver(from, topology, DIRECTION_RANDOM);
+
+			// We get an invalid direction only if there is a node with no
+			// outgoing edges. In this case, we check this condition.
+			if(to == INVALID_DIRECTION) {
+				test_assert(CountDirections(from, topology) == 0);
+				continue;
+			}
+
+			test_assert(to < nodes);
+			test_assert(IsNeighbor(from, to, topology));
+		}
+
+		ReleaseTopology(topology);
+	}
+
+	// Test link normalization
+	topology = InitializeTopology(TOPOLOGY_GRAPH, 3);
+	AddTopologyLink(topology, 0, 1, 1);
+	AddTopologyLink(topology, 0, 2, 1);
+	test_assert(NormalizeLinkProbabilities(topology));
+	bool dest[2] = {false, false};
+	for(int i = 0; i < 100; i++) {
+		dest[GetReceiver(0, topology, DIRECTION_RANDOM) - 1] = true;
+	}
+	test_assert(dest[0]);
+	test_assert(dest[1]);
+	ReleaseTopology(topology);
+
+
+	// Test sanity checks on graphs
+	topology = InitializeTopology(TOPOLOGY_GRAPH, 1);
+	for(enum topology_direction i = 0; i <= LAST_DIRECTION_VALID_VALUE; i++)
+		test_assert(GetReceiver(0, topology, i) == INVALID_DIRECTION);
+	ReleaseTopology(topology);
+
+	return 0;
+}
+
+
+int main(void)
+{
+	test("Graph topology", test_graph, NULL);
+}
