@@ -38,8 +38,6 @@ int gettimeofday(struct timeval* tp, void* tzp) {
 #include <sys/time.h>
 #endif
 
-//#include <sys/time.h>
-
 #include <likely.h>
 #include <random.h>
 #include <xxtea.h>
@@ -84,6 +82,7 @@ static const uint32_t xxtea_seeding_key[4] = {
        __res;                                                                                                 \
    })
 
+__attribute__((used)) __attribute__((constructor))
 static void init(void)
 {
 	struct timeval t;
@@ -96,15 +95,6 @@ static void init(void)
 	ctx.state[3] = master_seed;
 	xxtea_encode((uint32_t *)ctx.state, 8, xxtea_seeding_key);
 }
-
-#if defined(_WIN32) && defined(_MSC_VER)
-#pragma section(".CRT$XCU", read)
-#elif defined(__APPLE__) && defined(__MACH__)
-__attribute__((used)) __attribute__((section("__DATA,__mod_init_func")))
-#else
-__attribute__((used)) __attribute__((section (".init_array")))
-#endif
-__typeof__(init) *init_rstopology = init;
 
 /**
  * @brief Return a random-bak 64-bit value
