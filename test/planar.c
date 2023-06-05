@@ -19,92 +19,92 @@ int test_hexagon(_unused void *_)
 	struct topology *topology = InitializeTopology(TOPOLOGY_HEXAGON, 5, 4);
 
 	// Test odd row
-	test_assert(GetReceiver(5, topology, DIRECTION_W) == 4);
-	test_assert(GetReceiver(5, topology, DIRECTION_E) == 6);
-	test_assert(GetReceiver(5, topology, DIRECTION_NE) == 2);
-	test_assert(GetReceiver(5, topology, DIRECTION_NW) == 1);
-	test_assert(GetReceiver(5, topology, DIRECTION_SE) == 10);
-	test_assert(GetReceiver(5, topology, DIRECTION_SW) == 9);
+	test_assert(GetReceiver(topology, 5, DIRECTION_W) == 4);
+	test_assert(GetReceiver(topology, 5, DIRECTION_E) == 6);
+	test_assert(GetReceiver(topology, 5, DIRECTION_NE) == 2);
+	test_assert(GetReceiver(topology, 5, DIRECTION_NW) == 1);
+	test_assert(GetReceiver(topology, 5, DIRECTION_SE) == 10);
+	test_assert(GetReceiver(topology, 5, DIRECTION_SW) == 9);
 
 	// Test even row
-	test_assert(GetReceiver(10, topology, DIRECTION_W) == 9);
-	test_assert(GetReceiver(10, topology, DIRECTION_E) == 11);
-	test_assert(GetReceiver(10, topology, DIRECTION_NE) == 6);
-	test_assert(GetReceiver(10, topology, DIRECTION_NW) == 5);
-	test_assert(GetReceiver(10, topology, DIRECTION_SE) == 14);
-	test_assert(GetReceiver(10, topology, DIRECTION_SW) == 13);
+	test_assert(GetReceiver(topology, 10, DIRECTION_W) == 9);
+	test_assert(GetReceiver(topology, 10, DIRECTION_E) == 11);
+	test_assert(GetReceiver(topology, 10, DIRECTION_NE) == 6);
+	test_assert(GetReceiver(topology, 10, DIRECTION_NW) == 5);
+	test_assert(GetReceiver(topology, 10, DIRECTION_SE) == 14);
+	test_assert(GetReceiver(topology, 10, DIRECTION_SW) == 13);
 
 	// Test boundaries
-	test_assert(GetReceiver(0, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(0, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(0, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(0, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(1, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(1, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(2, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(2, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(3, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(3, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(3, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(7, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(7, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(7, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(11, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(15, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(15, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(15, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(19, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(19, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(19, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(18, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(18, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(17, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(17, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(16, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(16, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(16, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(16, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(12, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_SW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(4, topology, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 1, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 1, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 2, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 2, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 3, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 3, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 3, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 7, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 7, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 7, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 11, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 15, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 15, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 15, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 19, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 19, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 19, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 18, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 18, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 17, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 17, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 16, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 16, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 16, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 16, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 12, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 4, DIRECTION_W) == INVALID_DIRECTION);
 
 	// Sanity checks
-	test_assert(GetReceiver(5, topology, DIRECTION_N) == INVALID_DIRECTION);
-	test_assert(GetReceiver(5, topology, DIRECTION_S) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_N) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_S) == INVALID_DIRECTION);
 
 	// Test neighbors count
-	test_assert(CountDirections(0, topology) == 2);
-	test_assert(CountDirections(1, topology) == 4);
-	test_assert(CountDirections(2, topology) == 4);
-	test_assert(CountDirections(3, topology) == 3);
-	test_assert(CountDirections(4, topology) == 5);
-	test_assert(CountDirections(7, topology) == 3);
-	test_assert(CountDirections(8, topology) == 3);
-	test_assert(CountDirections(11, topology) == 5);
-	test_assert(CountDirections(12, topology) == 5);
-	test_assert(CountDirections(15, topology) == 3);
-	test_assert(CountDirections(16, topology) == 2);
-	test_assert(CountDirections(17, topology) == 4);
-	test_assert(CountDirections(18, topology) == 4);
-	test_assert(CountDirections(19, topology) == 3);
-	test_assert(CountDirections(5, topology) == 6);
-	test_assert(CountDirections(10, topology) == 6);
+	test_assert(CountDirections(topology, 0) == 2);
+	test_assert(CountDirections(topology, 1) == 4);
+	test_assert(CountDirections(topology, 2) == 4);
+	test_assert(CountDirections(topology, 3) == 3);
+	test_assert(CountDirections(topology, 4) == 5);
+	test_assert(CountDirections(topology, 7) == 3);
+	test_assert(CountDirections(topology, 8) == 3);
+	test_assert(CountDirections(topology, 11) == 5);
+	test_assert(CountDirections(topology, 12) == 5);
+	test_assert(CountDirections(topology, 15) == 3);
+	test_assert(CountDirections(topology, 16) == 2);
+	test_assert(CountDirections(topology, 17) == 4);
+	test_assert(CountDirections(topology, 18) == 4);
+	test_assert(CountDirections(topology, 19) == 3);
+	test_assert(CountDirections(topology, 5) == 6);
+	test_assert(CountDirections(topology, 10) == 6);
 
-	// Test random-bak receiver
+	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
 		for(unsigned j = 0; j < 20; j++) // 20 is the number of regions in this test
-			test_assert(GetReceiver(j, topology, DIRECTION_RANDOM) < CountRegions(topology));
+			test_assert(GetReceiver(topology, j, DIRECTION_RANDOM) < CountRegions(topology));
 	}
 
 	// Test neighbor check
-	test_assert(IsNeighbor(0, 1, topology) == true);
-	test_assert(IsNeighbor(0, 4, topology) == true);
-	test_assert(IsNeighbor(5, 10, topology) == true);
-	test_assert(IsNeighbor(17, 8, topology) == false);
-	test_assert(IsNeighbor(7, 4, topology) == false);
-	test_assert(IsNeighbor(3, 1, topology) == false);
+	test_assert(IsNeighbor(topology, 0, 1) == true);
+	test_assert(IsNeighbor(topology, 0, 4) == true);
+	test_assert(IsNeighbor(topology, 5, 10) == true);
+	test_assert(IsNeighbor(topology, 17, 8) == false);
+	test_assert(IsNeighbor(topology, 7, 4) == false);
+	test_assert(IsNeighbor(topology, 3, 1) == false);
 
 	ReleaseTopology(topology);
 
@@ -116,88 +116,88 @@ int test_square(_unused void *_)
 	struct topology *topology = InitializeTopology(TOPOLOGY_SQUARE, 3, 4);
 
 	// Test all directions
-	test_assert(GetReceiver(0, topology, DIRECTION_N) == INVALID_DIRECTION);
-	test_assert(GetReceiver(0, topology, DIRECTION_S) == 4);
-	test_assert(GetReceiver(0, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(0, topology, DIRECTION_E) == 1);
-	test_assert(GetReceiver(1, topology, DIRECTION_N) == INVALID_DIRECTION);
-	test_assert(GetReceiver(1, topology, DIRECTION_S) == 5);
-	test_assert(GetReceiver(1, topology, DIRECTION_W) == 0);
-	test_assert(GetReceiver(1, topology, DIRECTION_E) == 2);
-	test_assert(GetReceiver(2, topology, DIRECTION_N) == INVALID_DIRECTION);
-	test_assert(GetReceiver(2, topology, DIRECTION_S) == 6);
-	test_assert(GetReceiver(2, topology, DIRECTION_W) == 1);
-	test_assert(GetReceiver(2, topology, DIRECTION_E) == 3);
-	test_assert(GetReceiver(3, topology, DIRECTION_N) == INVALID_DIRECTION);
-	test_assert(GetReceiver(3, topology, DIRECTION_S) == 7);
-	test_assert(GetReceiver(3, topology, DIRECTION_W) == 2);
-	test_assert(GetReceiver(3, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(4, topology, DIRECTION_N) == 0);
-	test_assert(GetReceiver(4, topology, DIRECTION_S) == 8);
-	test_assert(GetReceiver(4, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(4, topology, DIRECTION_E) == 5);
-	test_assert(GetReceiver(5, topology, DIRECTION_N) == 1);
-	test_assert(GetReceiver(5, topology, DIRECTION_S) == 9);
-	test_assert(GetReceiver(5, topology, DIRECTION_W) == 4);
-	test_assert(GetReceiver(5, topology, DIRECTION_E) == 6);
-	test_assert(GetReceiver(6, topology, DIRECTION_N) == 2);
-	test_assert(GetReceiver(6, topology, DIRECTION_S) == 10);
-	test_assert(GetReceiver(6, topology, DIRECTION_W) == 5);
-	test_assert(GetReceiver(6, topology, DIRECTION_E) == 7);
-	test_assert(GetReceiver(7, topology, DIRECTION_N) == 3);
-	test_assert(GetReceiver(7, topology, DIRECTION_S) == 11);
-	test_assert(GetReceiver(7, topology, DIRECTION_W) == 6);
-	test_assert(GetReceiver(7, topology, DIRECTION_E) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_N) == 4);
-	test_assert(GetReceiver(8, topology, DIRECTION_S) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_W) == INVALID_DIRECTION);
-	test_assert(GetReceiver(8, topology, DIRECTION_E) == 9);
-	test_assert(GetReceiver(9, topology, DIRECTION_N) == 5);
-	test_assert(GetReceiver(9, topology, DIRECTION_S) == INVALID_DIRECTION);
-	test_assert(GetReceiver(9, topology, DIRECTION_W) == 8);
-	test_assert(GetReceiver(9, topology, DIRECTION_E) == 10);
-	test_assert(GetReceiver(10, topology, DIRECTION_N) == 6);
-	test_assert(GetReceiver(10, topology, DIRECTION_S) == INVALID_DIRECTION);
-	test_assert(GetReceiver(10, topology, DIRECTION_W) == 9);
-	test_assert(GetReceiver(10, topology, DIRECTION_E) == 11);
-	test_assert(GetReceiver(11, topology, DIRECTION_N) == 7);
-	test_assert(GetReceiver(11, topology, DIRECTION_S) == INVALID_DIRECTION);
-	test_assert(GetReceiver(11, topology, DIRECTION_W) == 10);
-	test_assert(GetReceiver(11, topology, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_N) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_S) == 4);
+	test_assert(GetReceiver(topology, 0, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 0, DIRECTION_E) == 1);
+	test_assert(GetReceiver(topology, 1, DIRECTION_N) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 1, DIRECTION_S) == 5);
+	test_assert(GetReceiver(topology, 1, DIRECTION_W) == 0);
+	test_assert(GetReceiver(topology, 1, DIRECTION_E) == 2);
+	test_assert(GetReceiver(topology, 2, DIRECTION_N) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 2, DIRECTION_S) == 6);
+	test_assert(GetReceiver(topology, 2, DIRECTION_W) == 1);
+	test_assert(GetReceiver(topology, 2, DIRECTION_E) == 3);
+	test_assert(GetReceiver(topology, 3, DIRECTION_N) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 3, DIRECTION_S) == 7);
+	test_assert(GetReceiver(topology, 3, DIRECTION_W) == 2);
+	test_assert(GetReceiver(topology, 3, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 4, DIRECTION_N) == 0);
+	test_assert(GetReceiver(topology, 4, DIRECTION_S) == 8);
+	test_assert(GetReceiver(topology, 4, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 4, DIRECTION_E) == 5);
+	test_assert(GetReceiver(topology, 5, DIRECTION_N) == 1);
+	test_assert(GetReceiver(topology, 5, DIRECTION_S) == 9);
+	test_assert(GetReceiver(topology, 5, DIRECTION_W) == 4);
+	test_assert(GetReceiver(topology, 5, DIRECTION_E) == 6);
+	test_assert(GetReceiver(topology, 6, DIRECTION_N) == 2);
+	test_assert(GetReceiver(topology, 6, DIRECTION_S) == 10);
+	test_assert(GetReceiver(topology, 6, DIRECTION_W) == 5);
+	test_assert(GetReceiver(topology, 6, DIRECTION_E) == 7);
+	test_assert(GetReceiver(topology, 7, DIRECTION_N) == 3);
+	test_assert(GetReceiver(topology, 7, DIRECTION_S) == 11);
+	test_assert(GetReceiver(topology, 7, DIRECTION_W) == 6);
+	test_assert(GetReceiver(topology, 7, DIRECTION_E) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_N) == 4);
+	test_assert(GetReceiver(topology, 8, DIRECTION_S) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_W) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 8, DIRECTION_E) == 9);
+	test_assert(GetReceiver(topology, 9, DIRECTION_N) == 5);
+	test_assert(GetReceiver(topology, 9, DIRECTION_S) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 9, DIRECTION_W) == 8);
+	test_assert(GetReceiver(topology, 9, DIRECTION_E) == 10);
+	test_assert(GetReceiver(topology, 10, DIRECTION_N) == 6);
+	test_assert(GetReceiver(topology, 10, DIRECTION_S) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 10, DIRECTION_W) == 9);
+	test_assert(GetReceiver(topology, 10, DIRECTION_E) == 11);
+	test_assert(GetReceiver(topology, 11, DIRECTION_N) == 7);
+	test_assert(GetReceiver(topology, 11, DIRECTION_S) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 11, DIRECTION_W) == 10);
+	test_assert(GetReceiver(topology, 11, DIRECTION_E) == INVALID_DIRECTION);
 
 	// Test neighbors count
-	test_assert(CountDirections(0, topology) == 2);
-	test_assert(CountDirections(1, topology) == 3);
-	test_assert(CountDirections(2, topology) == 3);
-	test_assert(CountDirections(3, topology) == 2);
-	test_assert(CountDirections(4, topology) == 3);
-	test_assert(CountDirections(5, topology) == 4);
-	test_assert(CountDirections(6, topology) == 4);
-	test_assert(CountDirections(7, topology) == 3);
-	test_assert(CountDirections(8, topology) == 2);
-	test_assert(CountDirections(9, topology) == 3);
-	test_assert(CountDirections(10, topology) == 3);
-	test_assert(CountDirections(11, topology) == 2);
+	test_assert(CountDirections(topology, 0) == 2);
+	test_assert(CountDirections(topology, 1) == 3);
+	test_assert(CountDirections(topology, 2) == 3);
+	test_assert(CountDirections(topology, 3) == 2);
+	test_assert(CountDirections(topology, 4) == 3);
+	test_assert(CountDirections(topology, 5) == 4);
+	test_assert(CountDirections(topology, 6) == 4);
+	test_assert(CountDirections(topology, 7) == 3);
+	test_assert(CountDirections(topology, 8) == 2);
+	test_assert(CountDirections(topology, 9) == 3);
+	test_assert(CountDirections(topology, 10) == 3);
+	test_assert(CountDirections(topology, 11) == 2);
 
 	// Sanity check
-	test_assert(GetReceiver(5, topology, DIRECTION_NE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(5, topology, DIRECTION_NW) == INVALID_DIRECTION);
-	test_assert(GetReceiver(5, topology, DIRECTION_SE) == INVALID_DIRECTION);
-	test_assert(GetReceiver(5, topology, DIRECTION_SW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_NE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_NW) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_SE) == INVALID_DIRECTION);
+	test_assert(GetReceiver(topology, 5, DIRECTION_SW) == INVALID_DIRECTION);
 
-	// Test random-bak receiver
+	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
 		for(unsigned j = 0; j < 12; j++) // 12 is the number of regions in this test
-			test_assert(GetReceiver(j, topology, DIRECTION_RANDOM) < CountRegions(topology));
+			test_assert(GetReceiver(topology, j, DIRECTION_RANDOM) < CountRegions(topology));
 	}
 
 	// Test neighbor check
-	test_assert(IsNeighbor(0, 1, topology) == true);
-	test_assert(IsNeighbor(0, 4, topology) == true);
-	test_assert(IsNeighbor(5, 10, topology) == false);
-	test_assert(IsNeighbor(11, 8, topology) == false);
-	test_assert(IsNeighbor(7, 4, topology) == false);
-	test_assert(IsNeighbor(3, 1, topology) == false);
+	test_assert(IsNeighbor(topology, 0, 1) == true);
+	test_assert(IsNeighbor(topology, 0, 4) == true);
+	test_assert(IsNeighbor(topology, 5, 10) == false);
+	test_assert(IsNeighbor(topology, 11, 8) == false);
+	test_assert(IsNeighbor(topology, 7, 4) == false);
+	test_assert(IsNeighbor(topology, 3, 1) == false);
 
 	ReleaseTopology(topology);
 

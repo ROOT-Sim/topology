@@ -34,40 +34,40 @@ enum topology_geometry {
 };
 
 enum topology_direction {
-	DIRECTION_E,	//!< East direction
-	DIRECTION_W,	//!< West direction
-	DIRECTION_N,	//!< North direction
-	DIRECTION_S,	//!< South direction
-	DIRECTION_NE,	//!< North-east direction
-	DIRECTION_SW,	//!< South-west direction
-	DIRECTION_NW,	//!< North-west direction
-	DIRECTION_SE,	//!< South-east direction
+	DIRECTION_E,      //!< East direction
+	DIRECTION_W,      //!< West direction
+	DIRECTION_N,      //!< North direction
+	DIRECTION_S,      //!< South direction
+	DIRECTION_NE,     //!< North-east direction
+	DIRECTION_SW,     //!< South-west direction
+	DIRECTION_NW,     //!< North-west direction
+	DIRECTION_SE,     //!< South-east direction
 
-	DIRECTION_RANDOM, //!< Get a random-bak direction, depending on the topology
+	DIRECTION_RANDOM, //!< Get a random direction, depending on the topology
 };
 
 /// An invalid direction, used as error value for the functions which return a LP id
 #define INVALID_DIRECTION UINT64_MAX
 
 extern lp_id_t CountRegions(struct topology *topology);
-extern lp_id_t CountDirections(lp_id_t from, struct topology *topology);
-extern lp_id_t GetReceiver(lp_id_t from, struct topology *topology, enum topology_direction direction);
+extern lp_id_t CountDirections(struct topology *topology, lp_id_t from);
+extern lp_id_t GetReceiver(struct topology *topology, lp_id_t from, enum topology_direction direction);
 
 extern void ReleaseTopology(struct topology *topology);
 extern bool AddTopologyLink(struct topology *topology, lp_id_t from, lp_id_t to, double probability);
-extern bool IsNeighbor(lp_id_t from, lp_id_t to, struct topology *topology);
+extern bool IsNeighbor(struct topology *topology, lp_id_t from, lp_id_t to);
 extern bool NormalizeLinkProbabilities(struct topology *topology);
+bool SetTopologyLinkData(struct topology *topology, lp_id_t from, lp_id_t to, void *data);
+void *GetTopologyLinkData(struct topology *topology, lp_id_t from, lp_id_t to);
 
 
 // The following trick belongs to Laurent Deniau at CERN.
 // https://groups.google.com/g/comp.std.c/c/d-6Mj5Lko_s?pli=1
 
 /// Compute the number of arguments to a variadic macro
-#define PP_NARG(...) \
-         PP_NARG_(__VA_ARGS__,PP_RSEQ_N())
+#define PP_NARG(...) PP_NARG_(__VA_ARGS__, PP_RSEQ_N())
 /// Compute the number of arguments to a variadic macro
-#define PP_NARG_(...) \
-         PP_128TH_ARG(__VA_ARGS__)
+#define PP_NARG_(...) PP_128TH_ARG(__VA_ARGS__)
 /// Enumerate the arguments' count to a variadic macro
 #define PP_128TH_ARG( \
           _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \

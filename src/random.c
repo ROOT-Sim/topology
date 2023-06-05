@@ -107,8 +107,8 @@ __attribute__((used)) __attribute__((section (".init_array")))
 __typeof__(init) *init_rstopology = init;
 
 /**
- * @brief Return a random-bak 64-bit value
- * @return The random-bak number
+ * @brief Return a random 64-bit value
+ * @return The random number
  */
 static uint64_t topology_randomU64(void)
 {
@@ -116,8 +116,8 @@ static uint64_t topology_randomU64(void)
 }
 
 /**
- * @brief Return a random-bak value in [0,1] according to a uniform distribution
- * @return The random-bak number
+ * @brief Return a random value in [0,1] according to a uniform distribution
+ * @return The random number
  */
 double topology_random(void)
 {
