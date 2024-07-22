@@ -19,6 +19,10 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <time.h>
+#include <mmsystem.h>
+
+#pragma comment(lib, "winmm.lib")
+
 #ifndef _TIMEVAL_DEFINED /* also in winsock[2].h */
 #define _TIMEVAL_DEFINED
 struct timeval {
@@ -27,11 +31,18 @@ struct timeval {
 };
 #endif /* _TIMEVAL_DEFINED */
 
-int gettimeofday(struct timeval* tp, void* tzp) {
+int gettimeofday(struct timeval *tp, void *tzp)
+{
+	(void)tzp;
 	DWORD t;
+
+	if(tp == NULL) {
+		return -1;
+	}
+
 	t = timeGetTime();
 	tp->tv_sec = t / 1000;
-	tp->tv_usec = t % 1000;
+	tp->tv_usec = (t % 1000) * 1000;
 	return 0;
 }
 #elif defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))

@@ -52,6 +52,7 @@ enum topology_direction {
 extern lp_id_t CountRegions(struct topology *topology);
 extern lp_id_t CountDirections(struct topology *topology, lp_id_t from);
 extern lp_id_t GetReceiver(struct topology *topology, lp_id_t from, enum topology_direction direction);
+extern void GetAllReceivers(struct topology *topology, lp_id_t from, lp_id_t *receivers);
 
 extern void ReleaseTopology(struct topology *topology);
 extern bool AddTopologyLink(struct topology *topology, lp_id_t from, lp_id_t to, double probability);
