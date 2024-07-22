@@ -80,8 +80,12 @@ int test_hexagon(_unused void *_)
 	test_assert(CountDirections(topology, 2) == 4);
 	test_assert(CountDirections(topology, 3) == 3);
 	test_assert(CountDirections(topology, 4) == 5);
+	test_assert(CountDirections(topology, 5) == 6);
+	test_assert(CountDirections(topology, 6) == 6);
 	test_assert(CountDirections(topology, 7) == 3);
 	test_assert(CountDirections(topology, 8) == 3);
+	test_assert(CountDirections(topology, 9) == 6);
+	test_assert(CountDirections(topology, 10) == 6);
 	test_assert(CountDirections(topology, 11) == 5);
 	test_assert(CountDirections(topology, 12) == 5);
 	test_assert(CountDirections(topology, 15) == 3);
@@ -89,8 +93,15 @@ int test_hexagon(_unused void *_)
 	test_assert(CountDirections(topology, 17) == 4);
 	test_assert(CountDirections(topology, 18) == 4);
 	test_assert(CountDirections(topology, 19) == 3);
-	test_assert(CountDirections(topology, 5) == 6);
-	test_assert(CountDirections(topology, 10) == 6);
+
+	// Test GetAllReceivers
+	lp_id_t receivers[CountDirections(topology, 4)];
+	GetAllReceivers(topology, 4, receivers);
+	test_assert(receivers[0] == 5);
+	test_assert(receivers[1] == 1);
+	test_assert(receivers[2] == 0);
+	test_assert(receivers[3] == 9);
+	test_assert(receivers[4] == 8);
 
 	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
@@ -164,6 +175,12 @@ int test_square(_unused void *_)
 	test_assert(GetReceiver(topology, 11, DIRECTION_S) == INVALID_DIRECTION);
 	test_assert(GetReceiver(topology, 11, DIRECTION_W) == 10);
 	test_assert(GetReceiver(topology, 11, DIRECTION_E) == INVALID_DIRECTION);
+
+	// Test GetAllReceivers
+	lp_id_t receivers[CountDirections(topology, 3)];
+	GetAllReceivers(topology, 3, receivers);
+	test_assert(receivers[0] == 2);
+	test_assert(receivers[1] == 7);
 
 	// Test neighbors count
 	test_assert(CountDirections(topology, 0) == 2);

@@ -310,7 +310,7 @@ static lp_id_t get_neighbor_mesh(lp_id_t from, struct topology *topology, enum t
 	assert(topology->geometry == TOPOLOGY_FCMESH);
 
 	if(unlikely(direction != DIRECTION_RANDOM)) {
-		fprintf(stderr, "[ERROR] Asking for a non-random direction in a graph.\n");
+		fprintf(stderr, "[ERROR] Asking for a non-random direction in a mesh.\n");
 		return INVALID_DIRECTION;
 	}
 
@@ -599,6 +599,67 @@ lp_id_t GetReceiver(struct topology *topology, lp_id_t from, enum topology_direc
 			return get_neighbor_graph(from, topology, direction);
 	}
 	return INVALID_DIRECTION;
+}
+
+/**
+ * Return a list of all neighbors of a given element.
+ *
+ * @param topology  The structure keeping the information about the topology
+ * @param from      The linear representation of the source element
+ * @param receivers An array of lp_id_t to store the neighbors. Can be preallocated externally using CountDirections().
+ */
+void GetAllReceivers(struct topology *topology, lp_id_t from, lp_id_t *receivers)
+{
+	struct graph_node *adj_node;
+
+	if(unlikely(from >= topology->regions)) {
+		fprintf(stderr, "[ERROR] `from` does not belong to the topology.\n");
+		return;
+	}
+
+	switch(topology->geometry) {
+		case TOPOLOGY_HEXAGON:
+			for(unsigned i = 0; i < 6; ++i) {
+				lp_id_t receiver = GetReceiver(topology, from, directions_hexagon[i]);
+				if(receiver != INVALID_DIRECTION)
+					*receivers++ = receiver;
+			}
+			break;
+
+		case TOPOLOGY_SQUARE:
+			__attribute__((fallthrough));
+		case TOPOLOGY_TORUS:
+			for(unsigned i = 0; i < 4; ++i) {
+				lp_id_t receiver = GetReceiver(topology, from, directions_square_torus[i]);
+				if(receiver != INVALID_DIRECTION)
+					*receivers++ = receiver;
+			}
+			break;
+
+		case TOPOLOGY_BIDRING:
+			*receivers++ = (from + 1) % topology->regions;
+			*receivers = (from + topology->regions - 1) % topology->regions;
+			break;
+
+		case TOPOLOGY_RING:
+			*receivers = (from + 1) % topology->regions;
+			break;
+
+		case TOPOLOGY_GRAPH:
+			adj_node = list_head(topology->adjacency[from]);
+			while(adj_node != NULL) {
+				*receivers++ = adj_node->neighbor;
+				adj_node = list_next(adj_node);
+			}
+			break;
+
+		case TOPOLOGY_STAR:
+		case TOPOLOGY_FCMESH:
+		default:
+			fprintf(stderr,
+			    "[WARNING] GetAllReceivers is not meaningful for fully connected mesh and star topologies!\n");
+			break;
+	}
 }
 
 

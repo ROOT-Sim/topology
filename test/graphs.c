@@ -10,6 +10,7 @@
 
 #include <test.h>
 #include <ROOT-Sim/topology.h>
+#include <string.h>
 
 const enum topology_geometry LAST_TOPOLOGY_WITH_TWO_PARAMETERS = TOPOLOGY_TORUS;
 const enum topology_geometry LAST_TOPOLOGY_VALID_VALUE = TOPOLOGY_GRAPH;
@@ -57,6 +58,32 @@ static int test_graph(_unused void *_)
 
 		ReleaseTopology(topology);
 	}
+
+	// Test GetAllReceivers
+	topology = InitializeTopology(TOPOLOGY_GRAPH, 6);
+	AddTopologyLink(topology, 0, 1, 1);
+	AddTopologyLink(topology, 1, 2, 1);
+	AddTopologyLink(topology, 1, 3, 1);
+	AddTopologyLink(topology, 3, 5, 1);
+	AddTopologyLink(topology, 4, 5, 1);
+	lp_id_t receivers[2];
+	memset(receivers, 0, sizeof(receivers));
+	GetAllReceivers(topology, 0, receivers);
+	test_assert(receivers[0] == 1);
+	test_assert(receivers[1] == 0);
+	memset(receivers, 0, sizeof(receivers));
+	GetAllReceivers(topology, 1, receivers);
+	test_assert(receivers[0] == 2);
+	test_assert(receivers[1] == 3);
+	memset(receivers, 0, sizeof(receivers));
+	GetAllReceivers(topology, 3, receivers);
+	test_assert(receivers[0] == 5);
+	test_assert(receivers[1] == 0);
+	memset(receivers, 0, sizeof(receivers));
+	GetAllReceivers(topology, 4, receivers);
+	test_assert(receivers[0] == 5);
+	test_assert(receivers[1] == 0);
+	ReleaseTopology(topology);
 
 	// Test link normalization
 	topology = InitializeTopology(TOPOLOGY_GRAPH, 3);
