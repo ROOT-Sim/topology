@@ -38,6 +38,11 @@ int test_ring(_unused void *_)
 	test_assert(CountDirections(topology, 3) == 1);
 	test_assert(CountDirections(topology, 4) == 1);
 
+	// Test GetAllReceivers
+	lp_id_t receivers[CountDirections(topology, 3)];
+	GetAllReceivers(topology, 3, receivers);
+	test_assert(receivers[0] == 4);
+
 	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
 		for(unsigned j = 0; j < 5; j++) // 5 is the number of regions in this test
@@ -87,6 +92,12 @@ int test_bidring(_unused void *_)
 	test_assert(CountDirections(topology, 2) == 2);
 	test_assert(CountDirections(topology, 3) == 2);
 	test_assert(CountDirections(topology, 4) == 2);
+
+	// Test GetAllReceivers
+	lp_id_t receivers[CountDirections(topology, 3)];
+	GetAllReceivers(topology, 3, receivers);
+	test_assert(receivers[0] == 4);
+	test_assert(receivers[1] == 2);
 
 	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
@@ -180,6 +191,14 @@ int test_torus(_unused void *_)
 	test_assert(GetReceiver(topology, 5, DIRECTION_NW) == INVALID_DIRECTION);
 	test_assert(GetReceiver(topology, 5, DIRECTION_SE) == INVALID_DIRECTION);
 	test_assert(GetReceiver(topology, 5, DIRECTION_SW) == INVALID_DIRECTION);
+
+	// Test GetAllReceivers
+	lp_id_t receivers[CountDirections(topology, 3)];
+	GetAllReceivers(topology, 3, receivers);
+	test_assert(receivers[0] == 0);
+	test_assert(receivers[1] == 2);
+	test_assert(receivers[2] == 11);
+	test_assert(receivers[3] == 7);
 
 	// Test random receiver
 	for(unsigned i = 0; i < RANDOM_TRIALS; i++) {
