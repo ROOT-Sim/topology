@@ -18,6 +18,8 @@ const enum topology_direction LAST_DIRECTION_VALID_VALUE = DIRECTION_SE;
 #define MAX_NODES_TEST 100
 #define NUM_QUERIES 500
 
+#define unique_ptr(num1, num2) (void *)(((unsigned long long)num1 << 32) | (unsigned long long)num2)
+
 static int test_graph(_unused void *_)
 {
 	struct topology *topology;
@@ -34,21 +36,23 @@ static int test_graph(_unused void *_)
 			test_assert(AddTopologyLink(topology, from, to, test_random_double()));
 			test_assert(AddTopologyLink(topology, from, to, 2.0) == false);
 			test_assert(AddTopologyLink(topology, from, to, -1.0) == false);
+			test_assert(SetTopologyLinkData(topology, from, to, unique_ptr(from, to)) == true);
 		}
 
 		for(unsigned i = 0; i < NUM_QUERIES; i++) {
 			from = test_random_range(nodes);
-			to = GetReceiver(from, topology, DIRECTION_RANDOM);
+			to = GetReceiver(topology, from, DIRECTION_RANDOM);
 
 			// We get an invalid direction only if there is a node with no
 			// outgoing edges. In this case, we check this condition.
 			if(to == INVALID_DIRECTION) {
-				test_assert(CountDirections(from, topology) == 0);
+				test_assert(CountDirections(topology, from) == 0);
 				continue;
 			}
 
 			test_assert(to < nodes);
-			test_assert(IsNeighbor(from, to, topology));
+			test_assert(IsNeighbor(topology, from, to));
+			test_assert(GetTopologyLinkData(topology, from, to) == unique_ptr(from, to));
 		}
 
 		ReleaseTopology(topology);
@@ -61,17 +65,16 @@ static int test_graph(_unused void *_)
 	test_assert(NormalizeLinkProbabilities(topology));
 	bool dest[2] = {false, false};
 	for(int i = 0; i < 100; i++) {
-		dest[GetReceiver(0, topology, DIRECTION_RANDOM) - 1] = true;
+		dest[GetReceiver(topology, 0, DIRECTION_RANDOM) - 1] = true;
 	}
 	test_assert(dest[0]);
 	test_assert(dest[1]);
 	ReleaseTopology(topology);
 
-
 	// Test sanity checks on graphs
 	topology = InitializeTopology(TOPOLOGY_GRAPH, 1);
 	for(enum topology_direction i = 0; i <= LAST_DIRECTION_VALID_VALUE; i++)
-		test_assert(GetReceiver(0, topology, i) == INVALID_DIRECTION);
+		test_assert(GetReceiver(topology, 0, i) == INVALID_DIRECTION);
 	ReleaseTopology(topology);
 
 	return 0;

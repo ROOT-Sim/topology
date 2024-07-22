@@ -23,6 +23,7 @@
 struct graph_node {
 	lp_id_t neighbor;        /**< The ID of the neighbor */
 	double probability;      /**< The probability to traverse this edge */
+	void *data;              /**< Custom user data associated with this edge */
 	struct graph_node *next; /**< Next node in the adjacency list */
 	struct graph_node *prev; /**< Next node in the adjacency list */
 };
@@ -81,7 +82,7 @@ static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size
 	}
 
 	for(size_t i = 0; i < n_directions; i++) {
-		ret = GetReceiver(from, topology, directions[i]);
+		ret = GetReceiver(topology, from, directions[i]);
 		if(ret != INVALID_DIRECTION)
 			break;
 	}
@@ -405,7 +406,7 @@ lp_id_t CountRegions(struct topology *topology)
 }
 
 
-lp_id_t CountDirections(lp_id_t from, struct topology *topology)
+lp_id_t CountDirections(struct topology *topology, lp_id_t from)
 {
 	lp_id_t neighbors;
 	uint32_t x, y;
@@ -489,7 +490,7 @@ bool NormalizeLinkProbabilities(struct topology *topology) {
 	return true;
 }
 
-bool IsNeighbor(lp_id_t from, lp_id_t to, struct topology *topology)
+bool IsNeighbor(struct topology *topology, lp_id_t from, lp_id_t to)
 {
 	struct graph_node *adj_node;
 
@@ -565,7 +566,7 @@ bool IsNeighbor(lp_id_t from, lp_id_t to, struct topology *topology)
 }
 
 
-lp_id_t GetReceiver(lp_id_t from, struct topology *topology, enum topology_direction direction)
+lp_id_t GetReceiver(struct topology *topology, lp_id_t from, enum topology_direction direction)
 {
 	if(unlikely(from >= topology->regions)) {
 		fprintf(stderr, "[ERROR] `from` does not belong to the topology.\n");
@@ -764,4 +765,58 @@ bool AddTopologyLink(struct topology *topology, lp_id_t from, lp_id_t to, double
 
 	element->probability = probability;
 	return true;
+}
+
+bool SetTopologyLinkData(struct topology *topology, lp_id_t from, lp_id_t to, void *data)
+{
+	if(unlikely(topology->geometry != TOPOLOGY_GRAPH)) {
+		fprintf(stderr, "[ERROR] Setting a weighted link in a topology which is not a graph.");
+		return false;
+	}
+
+	assert(topology->adjacency != NULL);
+	assert(from < topology->regions);
+	assert(to < topology->regions);
+
+	// Get the correct adjacency list
+	list(struct graph_node) list = topology->adjacency[from];
+
+	// See if there is already a node representing the link
+	struct graph_node *element = list_head(list);
+	while(element && element->neighbor != to)
+		element = list_next(element);
+
+	if(unlikely(element == NULL)) {
+		fprintf(stderr, "[ERROR] Trying to store data in a non-existing edge.");
+		return false;
+	}
+	element->data = data;
+	return true;
+}
+
+void *GetTopologyLinkData(struct topology *topology, lp_id_t from, lp_id_t to)
+{
+	if(unlikely(topology->geometry != TOPOLOGY_GRAPH)) {
+		fprintf(stderr, "[ERROR] Setting a weighted link in a topology which is not a graph.");
+		return NULL;
+	}
+
+	assert(topology->adjacency != NULL);
+	assert(from < topology->regions);
+	assert(to < topology->regions);
+
+	// Get the correct adjacency list
+	list(struct graph_node) list = topology->adjacency[from];
+
+	// See if there is already a node representing the link
+	struct graph_node *element = list_head(list);
+	while(element && element->neighbor != to)
+		element = list_next(element);
+
+	if(unlikely(element == NULL)) {
+		fprintf(stderr, "[ERROR] Trying to store data in a non-existing edge.");
+		return NULL;
+	}
+
+	return element->data;
 }

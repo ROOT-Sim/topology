@@ -33,7 +33,7 @@ static int test_init_fini(_unused void *_)
 		par2 = test_random_range(100) + 1;
 		topology = InitializeTopology(i, par1, par2);
 		test_assert(CountRegions(topology) == par1 * par2);
-		test_assert(GetReceiver(par1 * par2 + 1, topology, DIRECTION_E) == INVALID_DIRECTION);
+		test_assert(GetReceiver(topology, par1 * par2 + 1, DIRECTION_E) == INVALID_DIRECTION);
 		test_assert(AddTopologyLink(topology, par1, par2, test_random_double()) == false);
 		ReleaseTopology(topology);
 	}
@@ -44,7 +44,7 @@ static int test_init_fini(_unused void *_)
 		par1 = test_random_range(100) + 1;
 		topology = InitializeTopology(i, par1);
 		test_assert(CountRegions(topology) == par1);
-		test_assert(GetReceiver(par1 + 1, topology, DIRECTION_E) == INVALID_DIRECTION);
+		test_assert(GetReceiver(topology, par1 + 1, DIRECTION_E) == INVALID_DIRECTION);
 		ReleaseTopology(topology);
 	}
 
