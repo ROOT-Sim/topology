@@ -72,17 +72,19 @@ static lp_id_t get_random_neighbor(lp_id_t from, struct topology *topology, size
 	assert(topology->geometry != TOPOLOGY_FCMESH);
 	assert(topology->geometry != TOPOLOGY_GRAPH);
 
-	if(n_directions > 1) {
-		for(size_t i = 0; i < n_directions - 1; i++) {
-			size_t j = topology_randomrange((int)i, (int)n_directions - 1);
-			enum topology_direction t = directions[j];
-			directions[j] = directions[i];
-			directions[i] = t;
-		}
+	// Make a local copy of the directions array and shuffle it
+	enum topology_direction directions_copy[n_directions];
+	memcpy(directions_copy, directions, n_directions * sizeof(enum topology_direction));
+
+	for(size_t i = 0; i < n_directions - 1; i++) {
+		size_t j = topology_randomrange((int)i, (int)n_directions - 1);
+		enum topology_direction t = directions_copy[j];
+		directions_copy[j] = directions_copy[i];
+		directions_copy[i] = t;
 	}
 
 	for(size_t i = 0; i < n_directions; i++) {
-		ret = GetReceiver(topology, from, directions[i]);
+		ret = GetReceiver(topology, from, directions_copy[i]);
 		if(ret != INVALID_DIRECTION)
 			break;
 	}
