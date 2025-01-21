@@ -1,13 +1,13 @@
 /**
-* @file datatypes/list.h
-*
-* @brief List datatype
-*
-* A generic doubly-linked list
-*
-* SPDX-FileCopyrightText: 2008-2023 HPDCS Group <rootsim@googlegroups.com>
-* SPDX-License-Identifier: GPL-3.0-only
-*/
+ * @file datatypes/list.h
+ *
+ * @brief List datatype
+ *
+ * A generic doubly-linked list
+ *
+ * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 #pragma once
 
 #include <assert.h>

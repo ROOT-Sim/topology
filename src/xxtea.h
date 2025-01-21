@@ -1,13 +1,13 @@
 /**
-* @file xxtea.h
-*
-* @brief XXTEA block cipher
-*
-* An implementation of the XXTEA block cipher
-*
-* SPDX-FileCopyrightText: 2008-2023 HPDCS Group <rootsim@googlegroups.com>
-* SPDX-License-Identifier: GPL-3.0-only
-*/
+ * @file xxtea.h
+ *
+ * @brief XXTEA block cipher
+ *
+ * An implementation of the XXTEA block cipher
+ *
+ * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 #pragma once
 
 #include <stdint.h>
