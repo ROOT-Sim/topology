@@ -1,9 +1,9 @@
-# SPDX-FileCopyrightText: 2008-2021 HPDCS Group <rootsim@googlegroups.com>
+# SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
 # SPDX-License-Identifier: GPL-3.0-only
 cmake_minimum_required(VERSION 3.12)
 project("topology" LANGUAGES C DESCRIPTION "ROOT-Sim Topology Library")
 
-set(PROJECT_VERSION 1.1.0)
+set(PROJECT_VERSION 1.1.1)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)

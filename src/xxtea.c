@@ -1,14 +1,14 @@
 /**
-* @file xxtea.c
-*
-* @brief XXTEA block cipher
-*
-* An implementation of the XXTEA block cipher
-* (code based on "Correction to xtea" by David J. Wheeler and Roger M. Needham)
-*
-* SPDX-FileCopyrightText: 2008-2023 HPDCS Group <rootsim@googlegroups.com>
-* SPDX-License-Identifier: GPL-3.0-only
-*/
+ * @file xxtea.c
+ *
+ * @brief XXTEA block cipher
+ *
+ * An implementation of the XXTEA block cipher
+ * (code based on "Correction to xtea" by David J. Wheeler and Roger M. Needham)
+ *
+ * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 #include "xxtea.h"
 
 #include <assert.h>
