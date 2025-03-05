@@ -604,7 +604,7 @@ lp_id_t GetReceiver(struct topology *topology, lp_id_t from, enum topology_direc
 }
 
 /**
- * Return a list of all neighbors of a given element.
+ * Populate an array of all neighbors of a given element.
  *
  * @param topology  The structure keeping the information about the topology
  * @param from      The linear representation of the source element
@@ -664,6 +664,69 @@ void GetAllReceivers(struct topology *topology, lp_id_t from, lp_id_t *receivers
 	}
 }
 
+
+/** Count the number of inboud edges to a graph node.
+ *
+ * @param topology  The structure keeping the information about the topology
+ * @param me        The linear representation of the destination element
+ */
+lp_id_t CountSources(struct topology *topology, lp_id_t me)
+{
+	lp_id_t count = 0;
+
+	if(topology->geometry != TOPOLOGY_GRAPH) {
+		fprintf(stderr, "[WARNING] GetAllSources is meaningful for graph topologies only!\n");
+		return 0;
+	}
+
+	// Iterate over all the adjacency lists of all nodes to see whether we are the target of some edge
+	for(size_t i = 0; i < topology->regions; i++) {
+		struct graph_node *adj_node = list_head(topology->adjacency[i]);
+		while(adj_node != NULL) {
+			if(adj_node->neighbor == me) {
+				count++;
+				break;
+			}
+			adj_node = list_next(adj_node);
+		}
+	}
+
+	return count;
+}
+
+/**
+ * Populate an array of all source nodes in a topology graph.
+ *
+ * @param topology  The structure keeping the information about the topology
+ * @param from      The linear representation of the destination element
+ * @param sources   An array of lp_id_t to store the neighbors. Can be preallocated externally using CountDirections().
+ */
+void GetAllSources(struct topology *topology, lp_id_t to, lp_id_t *sources)
+{
+	struct graph_node *adj_node;
+
+	if(topology->geometry != TOPOLOGY_GRAPH) {
+		fprintf(stderr, "[WARNING] GetAllSources is meaningful for graph topologies only!\n");
+		return;
+	}
+
+	if(unlikely(to >= topology->regions)) {
+		fprintf(stderr, "[ERROR] `from` does not belong to the topology.\n");
+		return;
+	}
+
+	// Iterate ove all the adjacency lists of all nodes to see whether we are the target of some edge
+	for(size_t i = 0; i < topology->regions; i++) {
+		adj_node = list_head(topology->adjacency[i]);
+		while(adj_node != NULL) {
+			if(adj_node->neighbor == to) {
+				*sources++ = i;
+				break;
+			}
+			adj_node = list_next(adj_node);
+		}
+	}
+}
 
 /**
  * @brief Initialize a topology region.

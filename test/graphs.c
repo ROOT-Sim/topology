@@ -59,6 +59,18 @@ static int test_graph(_unused void *_)
 		ReleaseTopology(topology);
 	}
 
+	// Test the source query
+	topology = InitializeTopology(TOPOLOGY_GRAPH, 3);
+	AddTopologyLink(topology, 0, 2, 0.5);
+	AddTopologyLink(topology, 1, 2, 0.5);
+	test_assert(CountSources(topology, 2) == 2);
+	lp_id_t sources[CountSources(topology, 2)];
+	memset(sources, 0, sizeof(sources));
+	GetAllSources(topology, 2, sources);
+	test_assert(sources[0] == 0);
+	test_assert(sources[1] == 1);
+	ReleaseTopology(topology);
+
 	// Test GetAllReceivers
 	topology = InitializeTopology(TOPOLOGY_GRAPH, 6);
 	AddTopologyLink(topology, 0, 1, 1);
