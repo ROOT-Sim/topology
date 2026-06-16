@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+# SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
 # SPDX-License-Identifier: GPL-3.0-only
 
 if(WIN32)
@@ -6,7 +6,7 @@ if(WIN32)
 endif()
 
 add_library(rstopology STATIC topology.c random.c xxtea.c)
-target_include_directories(rstopology PRIVATE . include)
+target_include_directories(rstopology PRIVATE . PUBLIC include)
 target_link_libraries(rstopology ${EXTRA_LIBS})
 
 install(DIRECTORY include/ DESTINATION include)

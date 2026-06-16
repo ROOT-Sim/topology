@@ -1,9 +1,9 @@
 /**
- * @file test/tests/lib/topology.c
+ * @file test/graphs.c
  *
  * @brief Test: topology library
  *
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #include <limits.h>
