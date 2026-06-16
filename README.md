@@ -1,8 +1,8 @@
 # ROOT-Sim Topology Library
 
-[![Build Status](https://github.com/ROOT-Sim/cROOT-Sim/workflows/ROOT-Sim%20core%20CI/badge.svg)](https://github.com/ROOT-Sim/cROOT-Sim/actions)
+[![Continuous Integration](https://github.com/ROOT-Sim/topology/actions/workflows/ci.yml/badge.svg)](https://github.com/ROOT-Sim/topology/actions/workflows/ci.yml)
 [![GitHub issues](https://img.shields.io/github/issues/ROOT-Sim/topology)](https://github.com/ROOT-Sim/cROOT-Sim/issues)
-[![GitHub](https://img.shields.io/github/license/ROOT-Sim/topology)](https://github.com/ROOT-Sim/cROOT-Sim/blob/master/COPYING)
+[![REUSE status](https://api.reuse.software/badge/github.com/ROOT-Sim/topology)](https://api.reuse.software/info/github.com/ROOT-Sim/topology)
 
 *Brought to you by the [High Performance Computing & Simulation (HPCS)](https://hpcs.ing.uniroma2.it/) Research Group*
 
