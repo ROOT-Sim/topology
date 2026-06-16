@@ -1,11 +1,11 @@
 /**
- * @file datatypes/list.h
+ * @file src/list.h
  *
  * @brief List datatype
  *
  * A generic doubly-linked list
  *
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #pragma once

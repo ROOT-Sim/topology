@@ -1,11 +1,11 @@
 /**
- * @file lib/topology/topology.c
+ * @file src/topology.c
  *
  * @brief Topology library
  *
  * A library implementing commonly-required topologies in simulation models.
  *
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #include <assert.h>

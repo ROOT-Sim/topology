@@ -1,16 +1,13 @@
 /**
- * @file ROOT-Sim.h
+ * @file topology.h
  *
- * @brief ROOT-Sim header for model development
+ * @brief ROOT-Sim Topology Library
  *
- * This header defines all the symbols which are needed to develop a model
- * to be simulated on top of ROOT-Sim.
+ * A library implementing commonly-required topologies in simulation models.
+ * This header exposes the necessary structures and functions to define
+ * and interact with topologies like rings, grids, stars, and custom graphs.
  *
- * This header is the only file which should be included when developing
- * a simulation model. All function prototypes exposed to the application
- * developer are exposed and defined here.
- *
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #pragma once

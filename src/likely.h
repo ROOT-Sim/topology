@@ -1,13 +1,11 @@
 /**
- * @file likely.h
+ * @file src/likely.h
  *
  * @brief Likely/unlikley macros
  *
  * Likely/unlikely macros
  *
- * SPDX-FileCopyrightText: 2008-2021 D. Blackman and S. Vigna <vigna@acm.org>
- * SPDX-License-Identifier: CC0-1.0
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #pragma once

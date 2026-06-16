@@ -1,5 +1,5 @@
 /**
- * @file random.c
+ * @file src/random.c
  *
  * @brief topology RNG functions
  *
@@ -7,7 +7,7 @@
  *
  * SPDX-FileCopyrightText: 2008-2021 D. Blackman and S. Vigna <vigna@acm.org>
  * SPDX-License-Identifier: CC0-1.0
- * SPDX-FileCopyrightText: 2008-2025 HPDCS Group <rootsim@googlegroups.com>
+ * SPDX-FileCopyrightText: 2008-2026 HPCS Group <rootsim@googlegroups.com>
  * SPDX-License-Identifier: GPL-3.0-only
  */
 #include <assert.h>
